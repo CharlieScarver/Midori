@@ -11,7 +11,7 @@ namespace Midori.GameObjects.Units
 {
     public abstract class Unit : GameObject, IUnit
     {
-        private const int UnitGravity = 13;
+        private const int UnitGravity = 14;
         private const int UnitConsequentJumps = 2;
 
         private int currentFrame;
@@ -301,6 +301,7 @@ namespace Midori.GameObjects.Units
                     // if upper position is valid continue jumping
                     this.Y -= this.JumpSpeed;
                     this.JumpSpeed--;
+                    this.ApplyGravity();
                 }
                 else
                 {

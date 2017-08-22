@@ -18,7 +18,7 @@
         private const int MidoriAttackRangedFrameCount = 4;
         private const int MidoriRayComboFrameCount = 17;
         private const float MidoriDefaultMovementSpeed = 10;
-        private const float MidoriDefaultJumpSpeed = 21;
+        private const float MidoriDefaultJumpSpeed = 38;
         private const int MidoriDefaultHealth = 100;
  
         public Midori(Vector2 position)
