@@ -22,6 +22,7 @@ namespace Midori.GameObjects
             this.Id = this.GetHashCode();
             this.IsActive = true;
             this.BoundingBox = new Rectangle();
+			// TODO: Allow to flip the bounding box when the sprite is flipped
         }
 
         # region Properties

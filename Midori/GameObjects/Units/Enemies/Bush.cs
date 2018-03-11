@@ -20,6 +20,9 @@ namespace Midori.GameObjects.Units.Enemies
         private const int BushDefaultHealth = 150;
         private const int BushSight = 150;
 
+		private const int BushBoundingBoxWidth = 68;
+		private const int BushBoundingBoxHeight = 66;
+
         public Bush(Vector2 position)
             : base()
         {
@@ -28,15 +31,16 @@ namespace Midori.GameObjects.Units.Enemies
             this.Health = this.MaxHealth;
 
             this.BoundingBox = new Rectangle(
-                (int)this.X + (BushTextureWidth / 4) - 5,
-                (int)this.Y + 10,
-                (128 / 2) + 10,
-                86);
+                (int)this.X + 30,
+                (int)this.Y + 30,
+                BushBoundingBoxWidth,
+                BushBoundingBoxHeight);
 
             this.SpriteSheet = TextureLoader.BushSheet;
             this.TextureWidth = BushTextureWidth;
             this.TextureHeight = BushTextureHeight;
 
+			// TODO: What to do with BasicAnimationFrameCount? -> IAnimatable vs IAnimatableSomething
             //this.BasicAnimationFrameCount = BushBasicAnimationFrameCount;
             this.Delay = BushDelay;
 
@@ -148,8 +152,8 @@ namespace Midori.GameObjects.Units.Enemies
         protected override void UpdateBoundingBox()
         {
             // update bounding box
-            this.BoundingBoxX = (int)this.X + (BushTextureWidth / 4) - 5;
-            this.BoundingBoxY = (int)this.Y + 10;
+            this.BoundingBoxX = (int)this.X + 30;
+            this.BoundingBoxY = (int)this.Y + 30;
         }
 
         protected void UpdateSightRect()

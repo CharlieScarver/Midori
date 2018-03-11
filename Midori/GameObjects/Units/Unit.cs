@@ -1,24 +1,17 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using Midori.Core;
 using Midori.GameObjects.Projectiles;
 using Midori.Interfaces;
 using System;
+using System.Diagnostics;
 
 namespace Midori.GameObjects.Units
 {
-    public abstract class Unit : GameObject, IUnit
+    public abstract class Unit : AnimatedGameObject, IUnit
     {
         private const int UnitGravity = 13;
         private const int UnitConsequentJumps = 2;
 
-        private int currentFrame;
-        private int basicAnimationFrameCount;
-        private double timer;
-        private int delay;
-        private Rectangle sourceRect;
         private int health;
         private int maxHealth;
         private float movementSpeed;
@@ -50,88 +43,6 @@ namespace Midori.GameObjects.Units
         }
 
         # region Properties
-        // IAnimatable
-        public int CurrentFrame
-        {
-            get
-            {
-                return this.currentFrame;
-            }
-            protected set
-            {
-                if (value < 0)
-                {
-                    throw new ArgumentOutOfRangeException("Current Frame should not be negative");
-                }
-
-                this.currentFrame = value;
-            }
-        }
-
-        public int BasicAnimationFrameCount
-        {
-            get
-            {
-                return this.basicAnimationFrameCount;
-            }
-            protected set
-            {
-                if (value < 0)
-                {
-                    throw new ArgumentOutOfRangeException("Basic animation frame count Frame should not be negative");
-                }
-
-                this.basicAnimationFrameCount = value;
-            }
-        }
-
-        public double Timer
-        {
-            get
-            {
-                return this.timer;
-            }
-            protected set
-            {
-                if (value < 0.0)
-                {
-                    throw new ArgumentOutOfRangeException("Timer should not be negative");
-                }
-
-                this.timer = value;
-            }
-        }
-
-        public int Delay
-        {
-            get
-            {
-                return this.delay;
-            }
-            protected set
-            {
-                if (value < 0.0)
-                {
-                    throw new ArgumentOutOfRangeException("Delay should not be negative");
-                }
-
-                this.delay = value;
-            }
-        }
-
-        public Rectangle SourceRect
-        {
-            get { return this.sourceRect; }
-            protected set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException("Source rectangle shouldn't be null");
-                }
-
-                this.sourceRect = value;
-            }
-        }
 
         // IDestroyable
         public int Health
@@ -290,6 +201,7 @@ namespace Midori.GameObjects.Units
 # endregion 
 
         # region Non-abstract Methods
+
         // Non-abstract Methods
         protected void ManageMovement(GameTime gameTime)
         {
@@ -326,7 +238,7 @@ namespace Midori.GameObjects.Units
                 { 
                     if (!Collision.CheckForCollisionWithAnyTiles(this.BoundingBox))                    
                     {
-                        // if unit is already not inside a tile => lose free pathing
+                        // if unit is already outside a tile => lose free pathing
                         this.HasFreePathing = false;
                     }
                     else
@@ -378,19 +290,24 @@ namespace Midori.GameObjects.Units
                 if ((this.HasFreePathing || Collision.CheckForCollisionWithAnyTiles(this.BoundingBox))
                     && !Collision.CheckForCollisionWithWalls(this.FuturePosition))
                 {
+                    Debug.WriteLine("here");
                     // if unit has free pathing OR is in a tile
                     // AND will not collide with a wall => move
                     this.X -= this.MovementSpeed;
                 }
                 else
-                {                    
+                {
+
+                    Debug.WriteLine("there");
                     if (!Collision.CheckForCollisionWithAnyTiles(this.FuturePosition))
                     {
+                        Debug.WriteLine("there1");
                         // if next position is valid => move
                         this.X -= this.MovementSpeed;
                     }
                     else
                     {
+                        Debug.WriteLine("there2");
                         // else => stop
                         this.IsMovingLeft = false;
                     }
@@ -499,23 +416,6 @@ namespace Midori.GameObjects.Units
             }
         }
 
-        protected void BasicAnimationLogic(GameTime gameTime, int delay, int basicAnimationFrameCount)
-        {
-            this.Timer += gameTime.ElapsedGameTime.TotalMilliseconds;
-
-            if (this.Timer >= delay)
-            {
-                this.CurrentFrame++;
-
-                if (this.CurrentFrame >= basicAnimationFrameCount)
-                {
-                    this.CurrentFrame = 0;
-                }
-
-                this.Timer = 0.0;
-            }
-        }
-
         public void ResetAnimation()
         {
             this.CurrentFrame = 0;
@@ -528,21 +428,25 @@ namespace Midori.GameObjects.Units
             this.IsMovingLeft = false;
         }
 
-        public void GetHitByProjectile(Projectile projectile)
-        {
-            if (projectile is RayParticle)
-            {
-                this.Health -= 3;
-            }
-            else
-            {
-                this.Health -= projectile.Owner.DamageRanged;
-            }
-        }
+		public void GetHitByProjectile(Projectile projectile)
+		{
+			if (projectile.AbleToDoDamage)
+			{
+				if (projectile is RayParticle)
+				{
+					this.Health -= 3;
+				}
+				else
+				{
+					this.Health -= projectile.Owner.DamageRanged;
+				}
+			}
+		}
 
         # endregion
 
         # region Abstract Methods
+
         // Abstract Methods
         public abstract void Update(GameTime gameTime);
 

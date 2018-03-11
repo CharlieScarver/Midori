@@ -46,6 +46,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Game1.cs" />
+    <Compile Include="GameObjects\AnimatedGameObject.cs" />
+    <Compile Include="Interfaces\IAmAbleToDoDamage.cs" />
+    <Compile Include="Interfaces\IHaveAFinalAnimation.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

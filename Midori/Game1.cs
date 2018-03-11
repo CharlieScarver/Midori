@@ -13,11 +13,12 @@
     using GameObjects.Units.Enemies;
     using GameObjects.Units.PlayableCharacters;
     using Interfaces;
+	using Midori.GameObjects.Tiles;
 
-    /// <summary>
-    /// This is the main type for your game.
-    /// </summary>
-    public class Game1 : Game
+	/// <summary>
+	/// This is the main type for your game.
+	/// </summary>
+	public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -118,7 +119,16 @@
                             unit.GetHitByProjectile(projectile);
                             if (!(projectile is RayParticle))
                             {
-                                projectile.Nullify();
+								// If projectile has a final animation => play it
+								if (projectile is IHaveAFinalAnimation)
+								{
+									(projectile as IHaveAFinalAnimation).StartFinalAnimation();
+								}
+								else
+								{
+									// If it does not have a final animation => nullify
+									projectile.Nullify();
+								}
                             }
                         }
                         if (projectile.Owner is Enemy && unit is PlayableCharacter)
@@ -179,22 +189,22 @@
             {                 
                 spriteBatch.Begin(transformMatrix: camera.Transform);//, blendState: BlendState.AlphaBlend);
 
-                foreach (ITile tile in Engine.Tiles)
+                foreach (Tile tile in Engine.Tiles)
                 {
                     tile.Draw(spriteBatch);
-                    //tile.DrawBB(spriteBatch, Color.Crimson);
+                    // tile.DrawBB(spriteBatch, Color.Crimson);
                 }
                 
                 foreach (Enemy en in Engine.Enemies)
                 {
                     en.Draw(spriteBatch);
-                    //en.DrawBB(spriteBatch, Color.LightGreen);
+                    // en.DrawBB(spriteBatch, Color.LightGreen);
                 }
 
                 foreach (Projectile proj in Engine.Projectiles)
                 {
                     proj.Draw(spriteBatch);
-                    //proj.DrawBB(spriteBatch, Color.Aqua);
+                    // proj.DrawBB(spriteBatch, Color.Aqua);
                 }
 
                 foreach (Item item in Engine.Items)

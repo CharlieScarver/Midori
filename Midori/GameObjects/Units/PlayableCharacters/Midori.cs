@@ -51,7 +51,7 @@
 
         # region Properties
 
-        #endregion
+        # endregion
 
         # region Methods
         // Override Methods
@@ -123,7 +123,7 @@
             //spriteBatch.DrawString(TextureLoader.Font, this.FuturePosition.ToString(), new Vector2(this.X, this.Y - 50), Color.Black);
         }
 
-        # region Animaitons
+        # region Animations
         protected override void ManageAnimation(GameTime gameTime)
         {
             if (this.IsJumping)

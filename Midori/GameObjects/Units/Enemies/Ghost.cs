@@ -22,7 +22,10 @@ namespace Midori.GameObjects.Units.Enemies
         private const float GhostDefaultJumpSpeed = 21;
         private const int GhostDefaultHealth = 50;
 
-        public Ghost(Vector2 position)
+		private const int GhostBoundingBoxWidth = 29;
+		private const int GhostBoundingBoxHeight = 86;
+
+		public Ghost(Vector2 position)
             : base()
         {
             this.Position = position;
@@ -35,9 +38,9 @@ namespace Midori.GameObjects.Units.Enemies
 
             this.BoundingBox = new Rectangle(
                 (int)this.X + 60,
-                (int)this.Y + 20,
-                34,
-                86);
+                (int)this.Y + 15,
+				GhostBoundingBoxWidth,
+				GhostBoundingBoxHeight);
 
             this.SpriteSheet = TextureLoader.GhostSheet;
             this.TextureWidth = GhostTextureWidth;
@@ -135,7 +138,7 @@ namespace Midori.GameObjects.Units.Enemies
         {
             // update bounding box
             this.BoundingBoxX = (int)this.X + 60;
-            this.BoundingBoxY = (int)this.Y + 20;
+            this.BoundingBoxY = (int)this.Y + 15;
         }
 
         # region Animations
