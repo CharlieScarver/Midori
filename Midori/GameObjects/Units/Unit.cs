@@ -4,6 +4,7 @@ using Midori.GameObjects.Projectiles;
 using Midori.Interfaces;
 using System;
 using System.Diagnostics;
+using Midori.GameObjects.Units.Enemies;
 
 namespace Midori.GameObjects.Units
 {
@@ -317,7 +318,7 @@ namespace Midori.GameObjects.Units
             else if (this.IsMovingRight)
             {
                 this.FuturePosition = new Rectangle(
-                                (int)(this.BoundingBox.X + this.BoundingBox.Width + this.MovementSpeed),
+                                (int)(this.BoundingBox.X + this.MovementSpeed),
                                 (int)this.BoundingBox.Y,
                                 this.BoundingBox.Width,
                                 this.BoundingBox.Height);

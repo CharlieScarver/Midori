@@ -79,24 +79,24 @@ namespace Midori.GameObjects.Projectiles
             {
 #pragma warning disable CS0618 // Type or member is obsolete
 				spriteBatch.Draw(
-                texture: this.SpriteSheet,
-                sourceRectangle: this.SourceRect,
-                destinationRectangle: this.BoundingBox,
-                color: Color.White,
-                origin: new Vector2(0, 64),
-                effects: SpriteEffects.FlipHorizontally);
+                    texture: this.SpriteSheet,
+                    sourceRectangle: this.SourceRect,
+                    destinationRectangle: this.BoundingBox,
+                    color: Color.White,
+                    origin: new Vector2(0, 64),
+                    effects: SpriteEffects.FlipHorizontally);
 #pragma warning restore CS0618 // Type or member is obsolete
 			}
             else
             {
 #pragma warning disable CS0618 // Type or member is obsolete
 				spriteBatch.Draw(
-                texture: this.SpriteSheet,
-                sourceRectangle: this.SourceRect,
-                destinationRectangle: this.BoundingBox,
-                color: Color.White,
-                origin: new Vector2(0, 64),
-                effects: SpriteEffects.None);
+                    texture: this.SpriteSheet,
+                    sourceRectangle: this.SourceRect,
+                    destinationRectangle: this.BoundingBox,
+                    color: Color.White,
+                    origin: new Vector2(0, 64),
+                    effects: SpriteEffects.None);
 #pragma warning restore CS0618 // Type or member is obsolete
 			}
         }

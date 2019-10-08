@@ -68,7 +68,7 @@ namespace Midori.GameObjects.Units.Enemies
 
         protected CountDownTimer AttackTimer { get; set; }
 
-        protected CountDownTimer MovementTimer { get; set; }
+        public CountDownTimer MovementTimer { get; set; }
 
         #endregion
 
@@ -116,6 +116,26 @@ namespace Midori.GameObjects.Units.Enemies
                 this.AnimateRunning(gameTime);
                 this.MovementTimer.SetTimer(gameTime, this.Randomizer.Next(1, 4));
             }
+            // If it's going to collide with a wall
+            else if (!this.ValidateHorizontalPosition())
+            {
+                // Reverse movement direction
+                if (this.IsMovingLeft || this.IsFacingLeft)
+                {
+                    this.IsMovingLeft = false;
+                    this.IsFacingLeft = false;
+                    this.IsMovingRight = true;
+                }
+                else
+                {
+                    this.IsMovingRight = false;
+                    this.IsFacingLeft = true;
+                    this.IsMovingLeft = true;
+                }
+
+                this.AnimateRunning(gameTime);
+                this.MovementTimer.SetTimer(gameTime, this.Randomizer.Next(1, 4));
+            }
             
 
             // Attacking
@@ -133,7 +153,30 @@ namespace Midori.GameObjects.Units.Enemies
             }
 
         }
-                
+
+        private bool ValidateHorizontalPosition()
+        {
+            this.FuturePosition = this.IsMovingRight || !this.IsFacingLeft
+                ? new Rectangle(
+                (int)(this.BoundingBox.X + this.MovementSpeed),
+                (int)this.BoundingBox.Y,
+                this.BoundingBox.Width,
+                this.BoundingBox.Height)
+                : new Rectangle(
+                (int)(this.BoundingBox.X - this.MovementSpeed),
+                (int)this.BoundingBox.Y,
+                this.BoundingBox.Width,
+                this.BoundingBox.Height);
+            if (Collision.CheckForCollisionWithWalls(this.FuturePosition))
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
         protected override void UpdateBoundingBox()
         {
             // update bounding box

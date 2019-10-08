@@ -47,8 +47,8 @@
         /// </summary>
         protected override void Initialize()
         {
-            graphics.PreferredBackBufferWidth = graphics.GraphicsDevice.DisplayMode.Width;
-            graphics.PreferredBackBufferHeight = graphics.GraphicsDevice.DisplayMode.Height;
+            graphics.PreferredBackBufferWidth = 1280; // graphics.GraphicsDevice.DisplayMode.Width;
+            graphics.PreferredBackBufferHeight = 720; // graphics.GraphicsDevice.DisplayMode.Height;
             graphics.ApplyChanges();
             //Engine.LevelBounds = new Rectangle(0, 0, graphics.GraphicsDevice.Viewport.Width * 2, graphics.GraphicsDevice.Viewport.Height);
 
@@ -192,19 +192,19 @@
                 foreach (Tile tile in Engine.Tiles)
                 {
                     tile.Draw(spriteBatch);
-                    // tile.DrawBB(spriteBatch, Color.Crimson);
+                    tile.DrawBB(spriteBatch, Color.Crimson);
                 }
                 
                 foreach (Enemy en in Engine.Enemies)
                 {
                     en.Draw(spriteBatch);
-                    // en.DrawBB(spriteBatch, Color.LightGreen);
+                    en.DrawBB(spriteBatch, Color.LightGreen);
                 }
 
                 foreach (Projectile proj in Engine.Projectiles)
                 {
                     proj.Draw(spriteBatch);
-                    // proj.DrawBB(spriteBatch, Color.Aqua);
+                    proj.DrawBB(spriteBatch, Color.Aqua);
                 }
 
                 foreach (Item item in Engine.Items)
@@ -217,7 +217,7 @@
                 player.Draw(spriteBatch);
                 //player.DrawBB(spriteBatch, Color.Orange);
 
-                debug.SetCameraPosition(camera.Position);
+                debug.SetCamera(camera);
                 debug.StatsOnHover();
 
                 spriteBatch.End();
@@ -245,6 +245,29 @@
                 debug.DisplayObjectProps(player);
             }
             debug.MouseStats();
+
+            // ---
+            string message = $"Camera.X: {this.camera.Position.X}; Camera.Y: {this.camera.Position.Y}\n";
+            spriteBatch.DrawString(
+                TextureLoader.Font,
+                message,
+                new Vector2((graphics.GraphicsDevice.Viewport.Width / 2.0f) - TextureLoader.Font.MeasureString(message).X / 2,
+                    (graphics.GraphicsDevice.Viewport.Height / 2.0f) - TextureLoader.Font.MeasureString(message).Y / 2),
+                Color.Black);
+            spriteBatch.Draw(TextureLoader.TheOnePixel,
+                new Rectangle(this.camera.Viewport.X, this.camera.Viewport.Y, this.camera.Viewport.Width, 5), Color.DarkBlue);
+            spriteBatch.Draw(TextureLoader.TheOnePixel,
+                new Rectangle(this.camera.Viewport.X, this.camera.Viewport.Y, 5, this.camera.Viewport.Height), Color.DarkBlue);
+            spriteBatch.Draw(TextureLoader.TheOnePixel,
+                new Rectangle(this.camera.Viewport.X, this.camera.Viewport.Y-5, this.camera.Viewport.Width, 5), Color.DarkBlue);
+            // Draw gameTime
+            spriteBatch.DrawString(
+                TextureLoader.Font,
+                gameTime.TotalGameTime.Ticks.ToString(),
+                new Vector2(graphics.GraphicsDevice.Viewport.Width - TextureLoader.Font.MeasureString(message).X,
+                   (graphics.GraphicsDevice.Viewport.Height / 2.0f) - TextureLoader.Font.MeasureString(message).Y / 2),
+                Color.Black);
+            // ---
 
             spriteBatch.End();
            

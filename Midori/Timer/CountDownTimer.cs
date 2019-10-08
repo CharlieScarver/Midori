@@ -46,5 +46,10 @@ namespace Midori.Timer
 
         public bool IsActive { get; private set; }
         public bool IsComplete { get; private set; }
+
+        public override string ToString()
+        {
+            return $"{{ IsActive: {this.IsActive}; IsComplete: {this.IsComplete}; endCount: {this.endCount} }}";
+        }
     }
 }

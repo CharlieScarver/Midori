@@ -10,6 +10,7 @@ using Midori.GameObjects;
 using System;
 using Midori.GameObjects.Units;
 using Midori.Interfaces;
+using Midori.Camera;
 
 namespace Midori.DebugSystem
 {
@@ -19,6 +20,7 @@ namespace Midori.DebugSystem
         private MouseState currentMouseState;
         private MouseState previousMouseState;
         private Vector2 cameraPosition;
+        private Viewport cameraViewport;
 
         public MidoriDebug(ContentManager content, SpriteBatch spriteBatch)
         {
@@ -37,9 +39,10 @@ namespace Midori.DebugSystem
 
         private Point MousePosition { get { return new Point(Mouse.GetState().Position.X, Mouse.GetState().Position.Y); } }
 
-        public void SetCameraPosition(Vector2 cameraBounds)
+        public void SetCamera(Camera2D camera)
         {
-            this.cameraPosition = cameraBounds;
+            this.cameraPosition = camera.Position;
+            this.cameraViewport = camera.Viewport;
         }
 
         public void HoverDrawing(IGameObject obj)
@@ -57,7 +60,14 @@ namespace Midori.DebugSystem
                                         (int)TextureLoader.Font.MeasureString(obj.ToString()).Y),
                 color: Color.Black * 0.4f);
 
-            SpriteBatch.DrawString(TextureLoader.Font, obj.ToString(), obj.Position, Color.White);
+            SpriteBatch.Draw(
+                texture: TextureLoader.TheOnePixel,
+                destinationRectangle: new Rectangle((int)cameraPosition.X - cameraViewport.Width / 2,
+                                        (int)cameraPosition.Y - cameraViewport.Height / 2,
+                                        (int)TextureLoader.Font.MeasureString(obj.ToString()).X,
+                                        (int)TextureLoader.Font.MeasureString(obj.ToString()).Y),
+                color: Color.Black * 0.4f);
+            SpriteBatch.DrawString(TextureLoader.Font, obj.ToString(), new Vector2(cameraPosition.X, cameraPosition.Y) - new Vector2(cameraViewport.Width / 2, cameraViewport.Height / 2), Color.White);
             SpriteBatch.DrawString(TextureLoader.Font, "Anchored", obj.item.Position, Color.Crimson);
 
             SpriteBatch.Draw(
@@ -86,7 +96,7 @@ namespace Midori.DebugSystem
             currentMouseState = Mouse.GetState();
             foreach (var item in Engine.Objects)
             {
-                if (item.BoundingBox.Contains(this.MousePosition.ToVector2()))
+                if (item.BoundingBox.Contains(this.MousePosition.ToVector2() + new Vector2(cameraPosition.X, cameraPosition.Y) - new Vector2(cameraViewport.Width / 2, cameraViewport.Height / 2)))
                 {
                     HoverDrawing(item);
                     if (currentMouseState.LeftButton == ButtonState.Pressed && previousMouseState.LeftButton == ButtonState.Released)
@@ -132,7 +142,7 @@ namespace Midori.DebugSystem
         public void DisplayObjectProps(IGameObject obj)
         {
             var toDraw = new DebugObject(obj);
-            toDraw.Position = new Vector2(0,0);
+            toDraw.Position = new Vector2(5,5); // Adding a little padding on the top and left
             SpriteBatch.Draw(
                 texture: TextureLoader.TheOnePixel,
                 destinationRectangle: new Rectangle((int)toDraw.Position.X,
